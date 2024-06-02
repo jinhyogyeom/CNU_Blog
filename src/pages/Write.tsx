@@ -9,7 +9,7 @@ const TitleInput = styled.input`
   width: 100%;
   height: 66px;
   background: transparent;
-  padding: 2rem 0 0 0;
+  ding: 2rem 0 0 0;
   font-size: 2.75rem;
   resize: none;
   line-height: 1.5;
@@ -85,14 +85,68 @@ const SaveButton = styled.button`
 `;
 
 const Write = () => {
-  // todo (5) 게시글 작성 페이지 만들기
+  const [title, setTitle] = useState('');
+  const [tag, setTag] = useState('');
+  const [content, setContent] = useState('');
+
+  const navigate = useNavigate();
+
+  const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleTagChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setTag(e.target.value);
+  };
+
+  const handleContentChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(e.target.value);
+  };
+
+  const handleExit = () => {
+    // 나가기 버튼을 눌렀을 때 이전 페이지로 돌아가기
+    navigate(-1);
+  };
+
+  const handleSave = async () => {
+    // 저장하기 버튼을 눌렀을 때 게시글 저장하기
+    try {
+      await createPost({ title, contents: content, tag });
+      // 게시글 생성 후 홈 페이지로 이동
+      navigate('/');
+    } catch (error) {
+      console.error('Error creating post:', error);
+      // 에러 처리
+    }
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-      나는 글쓰기
-      <div style={{ height: 'calc(100% - 4rem)', paddingBottom: '4rem' }}>{/*todo (5-2) 제목 / 태그 셀렉 / 내용 입력란 추가*/}</div>
-      <BottomSheet>{/*todo (5-3) 나가기, 저장하기 버튼 추가*/}</BottomSheet>
+      <TitleInput
+        type="text"
+        placeholder="제목을 입력하세요"
+        value={title}
+        onChange={handleTitleChange}
+      />
+      <TagSelect value={tag} onChange={handleTagChange}>
+        <option value="">태그를 선택하세요</option>
+        <option value={TAG.REACT}>React</option>
+        <option value={TAG.JAVASCRIPT}>JavaScript</option>
+        <option value={TAG.TYPESCRIPT}>TypeScript</option>
+        {/* 원하는 태그 옵션을 추가할 수 있습니다 */}
+      </TagSelect>
+      <Editor
+        placeholder="내용을 입력하세요"
+        value={content}
+        onChange={handleContentChange}
+      />
+      <BottomSheet>
+        <ExitButton onClick={handleExit}>나가기</ExitButton>
+        <SaveButton onClick={handleSave}>저장하기</SaveButton>
+      </BottomSheet>
     </div>
   );
 };
+
 
 export default Write;
