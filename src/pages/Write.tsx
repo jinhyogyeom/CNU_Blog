@@ -1,7 +1,7 @@
-import { ChangeEvent, useEffect, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from '@emotion/styled';
-import { createPost, getPostById, updatePostById } from '../api';
+import { createPost } from '../api';
 import { TAG } from '../api/types';
 
 const TitleInput = styled.input`
@@ -111,7 +111,8 @@ const Write = () => {
   const handleSave = async () => {
     // 저장하기 버튼을 눌렀을 때 게시글 저장하기
     try {
-      await createPost({ title, contents: content, tag });
+      //await createPost({ title, contents: content, tag });
+      await createPost()
       // 게시글 생성 후 홈 페이지로 이동
       navigate('/');
     } catch (error) {
@@ -131,9 +132,9 @@ const Write = () => {
       <TagSelect value={tag} onChange={handleTagChange}>
         <option value="">태그를 선택하세요</option>
         <option value={TAG.REACT}>React</option>
-        <option value={TAG.JAVASCRIPT}>JavaScript</option>
-        <option value={TAG.TYPESCRIPT}>TypeScript</option>
-        {/* 원하는 태그 옵션을 추가할 수 있습니다 */}
+        <option value={TAG.JAVA}>JAVA</option>
+        <option value={TAG.SPRINGBOOT}>SPRINGBOOT</option>
+        <option value={TAG.DB}>DB</option>
       </TagSelect>
       <Editor
         placeholder="내용을 입력하세요"
